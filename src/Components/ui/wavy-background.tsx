@@ -54,7 +54,7 @@ export const WavyBackground = ({
       h = ctx.canvas.height = window.innerHeight;
       ctx.filter = `blur(${blur}px)`;
     };
-
+    
     render();
   };
 
@@ -65,7 +65,7 @@ export const WavyBackground = ({
     "#e879f9",
     "#22d3ee",
   ];
-  
+
   const drawWave = (n: number) => {
     nt += getSpeed();
     for (i = 0; i < n; i++) {
@@ -73,8 +73,8 @@ export const WavyBackground = ({
       ctx.lineWidth = waveWidth || 50;
       ctx.strokeStyle = waveColors[i % waveColors.length];
       for (x = 0; x < w; x += 5) {
-        const y = noise(x / 800, 0.3 * i, nt) * 100;
-        ctx.lineTo(x, y + h * 0.5); // adjust for height
+        var y = noise(x / 800, 0.3 * i, nt) * 100;
+        ctx.lineTo(x, y + h * 0.5);
       }
       ctx.stroke();
       ctx.closePath();
@@ -95,7 +95,7 @@ export const WavyBackground = ({
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, [blur, waveWidth, backgroundFill, waveOpacity, speed, colors]); // Include all dependencies
+  }, []);
 
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {
@@ -107,19 +107,12 @@ export const WavyBackground = ({
   }, []);
 
   return (
-    <div
-      className={cn(
-        "h-screen flex flex-col items-center justify-center",
-        containerClassName
-      )}
-    >
+    <div className={cn("h-screen flex flex-col items-center justify-center", containerClassName)}>
       <canvas
         className="absolute inset-0 z-0"
         ref={canvasRef}
         id="canvas"
-        style={{
-          ...(isSafari ? { filter: `blur(${blur}px)` } : {}),
-        }}
+        style={isSafari ? { filter: `blur(${blur}px)` } : {}}
       ></canvas>
       <div className={cn("relative z-10", className)} {...props}>
         {children}
